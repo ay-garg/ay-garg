@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ayush Garg — Senior SRE @ Red Hat</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Patrick+Hand&display=swap" rel="stylesheet">
+
+<svg width="0" height="0" style="position:absolute;pointer-events:none">
+  <defs>
+    <filter id="rough" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.035 0.06" numOctaves="4" seed="7" result="noise"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="0.9" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <marker id="arr" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#374151"/>
+    </marker>
+    <marker id="arr-blue" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#1e40af"/>
+    </marker>
+    <marker id="arr-green" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#15803d"/>
+    </marker>
+    <marker id="arr-purple" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#6d28d9"/>
+    </marker>
+    <marker id="arr-orange" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#c2410c"/>
+    </marker>
+    <marker id="arr-teal" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#0d9488"/>
+    </marker>
+  </defs>
+</svg>
+
+<style>
+/* ── TOKENS ─────────────────────────────────────────── */
+:root {
+  --bg:         #faf8f3;
+  --grid:       rgba(0,0,0,0.065);
+  --ink:        #1a1a2e;
+  --ink2:       #374151;
+  --muted:      #6b7280;
+  --border-ink: #9ca3af;
+
+  --f-blue:#dbeafe;   --b-blue:#2563eb;   --t-blue:#1e3a8a;
+  --f-green:#dcfce7;  --b-green:#16a34a;  --t-green:#14532d;
+  --f-purple:#ede9fe; --b-purple:#7c3aed; --t-purple:#4c1d95;
+  --f-orange:#ffedd5; --b-orange:#ea580c; --t-orange:#7c2d12;
+  --f-red:#fee2e2;    --b-red:#dc2626;    --t-red:#7f1d1d;
+  --f-yellow:#fef9c3; --b-yellow:#ca8a04; --t-yellow:#713f12;
+  --f-teal:#ccfbf1;   --b-teal:#0d9488;   --t-teal:#134e4a;
+  --f-pink:#fce7f3;   --b-pink:#db2777;   --t-pink:#831843;
+  --f-gray:#f3f4f6;   --b-gray:#6b7280;   --t-gray:#1f2937;
+}
+
+*,*::before,*::after { margin:0; padding:0; box-sizing:border-box }
+html { scroll-behavior: smooth }
+
+body {
+  font-family: 'Patrick Hand', cursive;
+  background-color: var(--bg);
+  background-image: radial-gradient(circle, var(--grid) 1.2px, transparent 1.2px);
+  background-size: 22px 22px;
+  color: var(--ink);
+  line-height: 1.65;
+}
+
+/* ── LAYOUT ─────────────────────────────────────────── */
+.layout { display: grid; grid-template-columns: 265px 1fr; min-height: 100vh }
+
+/* ── SIDEBAR ────────────────────────────────────────── */
+.sidebar {
+  background: #23232e;
+  border-right: 3px solid #111;
+  position: sticky; top: 0; height: 100vh;
+  overflow-y: auto; padding: 1rem 0;
+}
+.sidebar-brand {
+  padding: 1.25rem 1.25rem 1.5rem;
+  border-bottom: 1px dashed #3a3a4a;
+  margin-bottom: .75rem;
+}
+.sidebar-brand h3 {
+  font-family: 'Caveat', cursive;
+  font-size: 1.25rem; font-weight: 700;
+  color: #f0ead8; letter-spacing: .03em;
+}
+.sidebar-brand p { font-size: .8rem; color: #8d8da0; margin-top: .25rem }
+.sidebar nav a {
+  display: flex; align-items: center; gap: .75rem;
+  padding: .55rem 1.25rem;
+  text-decoration: none; color: #8d8da0;
+  font-family: 'Caveat', cursive; font-size: 1rem;
+  transition: background .15s, color .15s;
+  border-left: 3px solid transparent;
+}
+.sidebar nav a:hover { background: #2e2e3d; color: #f0ead8 }
+.sidebar nav a .num {
+  width: 26px; height: 26px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Caveat', cursive; font-size: .85rem; font-weight: 700;
+  flex-shrink: 0; border: 2px solid;
+}
+.s1 a .num { border-color:#60a5fa; color:#60a5fa }
+.s2 a .num { border-color:#4ade80; color:#4ade80 }
+.s3 a .num { border-color:#fb923c; color:#fb923c }
+.s4 a .num { border-color:#c084fc; color:#c084fc }
+.s5 a .num { border-color:#f87171; color:#f87171 }
+.sidebar-links {
+  padding: 1.1rem 1.25rem;
+  border-top: 1px dashed #3a3a4a;
+  margin-top: .5rem;
+  display: flex; flex-direction: column; gap: .45rem;
+}
+.sidebar-links a {
+  color: #8d8da0; text-decoration: none;
+  font-family: 'Caveat', cursive; font-size: .9rem;
+  display: flex; align-items: center; gap: .4rem;
+  transition: color .15s;
+}
+.sidebar-links a:hover { color: #f0ead8 }
+
+/* ── MAIN ────────────────────────────────────────────── */
+.main { padding-bottom: 5rem }
+
+/* ── HERO ────────────────────────────────────────────── */
+.hero {
+  padding: 3rem 2.5rem 2.5rem;
+  border-bottom: 3px solid var(--ink);
+  position: relative; overflow: visible;
+  clip-path: inset(0 0 -1px 0);
+}
+.hero::before {
+  content: '';
+  position: absolute; bottom: -40px; right: -40px;
+  width: 200px; height: 200px; border-radius: 50%;
+  border: 3px dashed rgba(0,0,0,0.07);
+}
+.hero::after {
+  content: '';
+  position: absolute; top: -30px; right: 80px;
+  width: 120px; height: 120px; border-radius: 50%;
+  border: 2px dashed rgba(0,0,0,0.05);
+}
+.hero-badge {
+  display: inline-flex; align-items: center; gap: .4rem;
+  background: #fef9c3; border: 2px solid var(--b-yellow);
+  border-radius: 4px 10px 6px 12px / 12px 6px 10px 4px;
+  padding: .25rem .85rem;
+  font-family: 'Caveat', cursive; font-size: .95rem; color: var(--t-yellow);
+  margin-bottom: 1rem; filter: url(#rough);
+}
+.hero h1 {
+  font-family: 'Caveat', cursive;
+  font-size: 3.2rem; font-weight: 700;
+  color: var(--ink); line-height: 1.1; margin-bottom: .75rem;
+}
+.hero h1 .hl { position: relative; display: inline-block }
+.hero h1 .hl::after {
+  content: ''; position: absolute; bottom: 2px; left: 0; right: 0;
+  height: 10px; background: #fde047; opacity: .5; z-index: -1; border-radius: 2px;
+}
+.hero p {
+  font-size: 1rem; color: var(--ink2);
+  max-width: 600px; margin-bottom: 1.75rem; line-height: 1.7;
+}
+.stats { display: flex; gap: 1.5rem; flex-wrap: wrap }
+.stat {
+  background: #fff; border: 2px solid var(--ink);
+  border-radius: 6px 12px 8px 10px / 10px 8px 12px 6px;
+  padding: .6rem 1.1rem; text-align: center; filter: url(#rough);
+}
+.stat .val {
+  font-family: 'Caveat', cursive;
+  font-size: 1.8rem; font-weight: 700; color: var(--ink); display: block;
+}
+.stat .lbl { font-size: .75rem; color: var(--muted); text-transform: uppercase; letter-spacing: .05em }
+
+/* ── SECTION ─────────────────────────────────────────── */
+.wb-section {
+  padding: 2.5rem 2.5rem 2rem;
+  border-bottom: 2px dashed #d1cfc8;
+}
+.section-head { margin-bottom: 2rem }
+.section-tag-row { display: flex; align-items: center; gap: .75rem; margin-bottom: .75rem }
+.section-num-bubble {
+  width: 38px; height: 38px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Caveat', cursive; font-size: 1.1rem; font-weight: 700;
+  border: 2.5px solid var(--ink); color: var(--ink);
+  flex-shrink: 0; filter: url(#rough);
+}
+.section-tag {
+  font-family: 'Caveat', cursive; font-size: .95rem; font-weight: 600;
+  padding: .2rem .75rem; border-radius: 20px; border: 2px solid;
+}
+.section-head h2 {
+  font-family: 'Caveat', cursive;
+  font-size: 1.85rem; font-weight: 700; color: var(--ink); line-height: 1.2;
+}
+.section-head p {
+  font-size: .95rem; color: var(--ink2);
+  max-width: 760px; margin-top: .5rem; line-height: 1.7;
+}
+
+/* ── SKETCH BOX ──────────────────────────────────────── */
+.sbox {
+  border: 2.5px solid;
+  border-radius: 5px 10px 7px 12px / 12px 7px 10px 5px;
+  padding: .55rem .9rem;
+  font-family: 'Caveat', cursive;
+  font-weight: 600; font-size: .95rem;
+  text-align: center; position: relative;
+  filter: url(#rough);
+}
+.sbox small { display: block; font-size: .75rem; font-weight: 400; opacity: .75; margin-top: .1rem }
+.sbox.blue   { border-color:var(--b-blue);   background:var(--f-blue);   color:var(--t-blue) }
+.sbox.green  { border-color:var(--b-green);  background:var(--f-green);  color:var(--t-green) }
+.sbox.purple { border-color:var(--b-purple); background:var(--f-purple); color:var(--t-purple) }
+.sbox.orange { border-color:var(--b-orange); background:var(--f-orange); color:var(--t-orange) }
+.sbox.red    { border-color:var(--b-red);    background:var(--f-red);    color:var(--t-red) }
+.sbox.yellow { border-color:var(--b-yellow); background:var(--f-yellow); color:var(--t-yellow) }
+.sbox.teal   { border-color:var(--b-teal);   background:var(--f-teal);   color:var(--t-teal) }
+.sbox.pink   { border-color:var(--b-pink);   background:var(--f-pink);   color:var(--t-pink) }
+.sbox.gray   { border-color:var(--b-gray);   background:var(--f-gray);   color:var(--t-gray) }
+
+/* ── ARROWS ──────────────────────────────────────────── */
+.arr      { display:flex; align-items:center; font-family:'Caveat',cursive; font-size:1rem; color:var(--ink2); flex-shrink:0 }
+.arr::after      { content:'→'; font-size:1.3rem; line-height:1 }
+.arr-down::after { content:'↓'; font-size:1.3rem; line-height:1 }
+.arr-label { font-size:.75rem; color:var(--muted); white-space:nowrap }
+
+/* ── FLOWS ───────────────────────────────────────────── */
+.flow-h { display:flex; align-items:center; gap:.5rem; flex-wrap:wrap }
+.flow-v { display:flex; flex-direction:column; align-items:center; gap:.35rem }
+.flow-h .sbox { min-width:110px }
+
+/* ── LAYER GROUP ─────────────────────────────────────── */
+.layer-group {
+  border: 2.5px dashed; border-radius: 10px;
+  padding: 1.25rem 1rem .75rem;
+  margin: 1.75rem 0 .75rem; position: relative;
+}
+.layer-group .layer-label {
+  position: absolute; top: -14px; left: 14px;
+  font-family: 'Caveat', cursive; font-size: .9rem; font-weight: 700;
+  padding: .1rem .6rem; border-radius: 20px; border: 2px solid;
+  background: var(--bg);
+}
+.layer-group .inner { display:flex; flex-wrap:wrap; gap:.6rem; justify-content:center; align-items:flex-start }
+.layer-group.blue   { border-color:var(--b-blue) }
+.layer-group.blue .layer-label { color:var(--t-blue);border-color:var(--b-blue) }
+.layer-group.green  { border-color:var(--b-green) }
+.layer-group.green .layer-label { color:var(--t-green);border-color:var(--b-green) }
+.layer-group.purple { border-color:var(--b-purple) }
+.layer-group.purple .layer-label { color:var(--t-purple);border-color:var(--b-purple) }
+.layer-group.orange { border-color:var(--b-orange) }
+.layer-group.orange .layer-label { color:var(--t-orange);border-color:var(--b-orange) }
+.layer-group.teal   { border-color:var(--b-teal) }
+.layer-group.teal .layer-label { color:var(--t-teal);border-color:var(--b-teal) }
+.layer-group.yellow { border-color:var(--b-yellow) }
+.layer-group.yellow .layer-label { color:var(--t-yellow);border-color:var(--b-yellow) }
+.layer-group.pink   { border-color:var(--b-pink) }
+.layer-group.pink .layer-label { color:var(--t-pink);border-color:var(--b-pink) }
+.layer-group.gray   { border-color:var(--b-gray) }
+.layer-group.gray .layer-label { color:var(--t-gray);border-color:var(--b-gray) }
+
+/* ── STICKY ──────────────────────────────────────────── */
+.sticky {
+  background: #fef9c3; border-top: 4px solid #ca8a04;
+  padding: .85rem 1rem; border-radius: 0 0 6px 6px;
+  font-size: .88rem; line-height: 1.65; color: #713f12;
+  box-shadow: 2px 4px 10px rgba(0,0,0,.13);
+  word-wrap: break-word; overflow-wrap: break-word;
+}
+.sticky h4 { font-family:'Caveat',cursive; font-size:1rem; font-weight:700; margin-bottom:.4rem; color:#92400e }
+.sticky.blue   { background:#dbeafe; border-top-color:#2563eb; color:var(--t-blue) }
+.sticky.blue h4  { color:#1e3a8a }
+.sticky.green  { background:#dcfce7; border-top-color:#16a34a; color:var(--t-green) }
+.sticky.green h4 { color:#14532d }
+.sticky.purple { background:#ede9fe; border-top-color:#7c3aed; color:var(--t-purple) }
+.sticky.purple h4{ color:#4c1d95 }
+.sticky.red    { background:#fee2e2; border-top-color:#dc2626; color:var(--t-red) }
+.sticky.red h4   { color:#7f1d1d }
+.sticky.teal   { background:#ccfbf1; border-top-color:#0d9488; color:var(--t-teal) }
+.sticky.teal h4  { color:#134e4a }
+.sticky-grid { display:grid; grid-template-columns:1fr 1fr; gap:1.25rem; margin:1.25rem 0; align-items:start }
+
+/* ── STEPS ───────────────────────────────────────────── */
+.steps { display:flex; flex-direction:column; gap:0; margin:1rem 0 }
+.step  { display:flex; gap:1rem; margin-bottom:.1rem }
+.step-line { display:flex; flex-direction:column; align-items:center }
+.step-dot {
+  width:30px; height:30px; border-radius:50%;
+  border:2.5px solid; display:flex; align-items:center; justify-content:center;
+  font-family:'Caveat',cursive; font-size:.9rem; font-weight:700;
+  flex-shrink:0; filter:url(#rough);
+}
+.step-connector { flex:1; width:2px; background:var(--border-ink); margin:.25rem 0; min-height:14px; opacity:.35 }
+.step-body { padding-bottom:1rem; flex:1 }
+.step-body h4 { font-family:'Caveat',cursive; font-size:1.1rem; font-weight:700; color:var(--ink); margin-bottom:.3rem }
+.step-body p  { font-size:.88rem; color:var(--ink2); line-height:1.7 }
+.step-body a  { color:var(--b-blue); text-decoration:none }
+.step-body a:hover { text-decoration:underline }
+.step.blue .step-dot   { border-color:var(--b-blue);   color:var(--t-blue);   background:var(--f-blue) }
+.step.green .step-dot  { border-color:var(--b-green);  color:var(--t-green);  background:var(--f-green) }
+.step.purple .step-dot { border-color:var(--b-purple); color:var(--t-purple); background:var(--f-purple) }
+.step.orange .step-dot { border-color:var(--b-orange); color:var(--t-orange); background:var(--f-orange) }
+.step.red .step-dot    { border-color:var(--b-red);    color:var(--t-red);    background:var(--f-red) }
+.step.teal .step-dot   { border-color:var(--b-teal);   color:var(--t-teal);   background:var(--f-teal) }
+.step.pink .step-dot   { border-color:var(--b-pink);   color:var(--t-pink);   background:var(--f-pink) }
+
+/* ── DIAGRAM CANVAS ──────────────────────────────────── */
+.diagram-canvas { width:100%; margin:1.25rem 0; overflow-x:auto; -webkit-overflow-scrolling:touch }
+.diagram-canvas svg { display:block; min-width:560px }
+
+/* ── SUB-TITLE ───────────────────────────────────────── */
+.sub-title {
+  font-family:'Caveat',cursive; font-size:1.15rem; font-weight:700;
+  color:var(--ink); margin:1.5rem 0 .75rem;
+  display:flex; align-items:center; gap:.5rem;
+}
+.sub-title::before { content:'▸'; color:var(--b-orange) }
+
+/* ── CALLOUT ─────────────────────────────────────────── */
+.callout {
+  border:2.5px solid;
+  border-radius:4px 12px 6px 10px / 10px 6px 12px 4px;
+  padding:1rem 1.25rem; margin:1rem 0;
+  word-wrap:break-word; overflow-wrap:break-word;
+}
+.callout h4 { font-family:'Caveat',cursive; font-size:1.1rem; font-weight:700; margin-bottom:.5rem }
+.callout p, .callout li { font-size:.88rem; line-height:1.7; color:var(--ink2) }
+.callout ul { padding-left:1.25rem }
+.callout li { margin-bottom:.3rem }
+.callout.blue   { border-color:var(--b-blue);   background:var(--f-blue) }
+.callout.blue h4   { color:var(--t-blue) }
+.callout.green  { border-color:var(--b-green);  background:var(--f-green) }
+.callout.green h4  { color:var(--t-green) }
+.callout.purple { border-color:var(--b-purple); background:var(--f-purple) }
+.callout.purple h4 { color:var(--t-purple) }
+.callout.yellow { border-color:var(--b-yellow); background:var(--f-yellow) }
+.callout.yellow h4 { color:var(--t-yellow) }
+.callout.teal   { border-color:var(--b-teal);   background:var(--f-teal) }
+.callout.teal h4   { color:var(--t-teal) }
+
+/* ── PROJECTS ────────────────────────────────────────── */
+.projects-grid { display:grid; grid-template-columns:1fr 1fr; gap:1.25rem; margin:1.25rem 0 }
+.project-card {
+  border:2.5px solid var(--border-ink);
+  border-radius:6px 14px 8px 12px / 12px 8px 14px 6px;
+  padding:1rem 1.25rem; background:#fff;
+  filter:url(#rough); display:flex; flex-direction:column; gap:.5rem;
+  transition:transform .15s;
+}
+.project-card:hover { transform:translateY(-2px) }
+.project-card h4 { font-family:'Caveat',cursive; font-size:1.1rem; font-weight:700; color:var(--ink) }
+.project-card h4 a { color:var(--t-blue); text-decoration:none }
+.project-card h4 a:hover { text-decoration:underline }
+.project-card p { font-size:.85rem; color:var(--ink2); line-height:1.6 }
+.project-card .tags { display:flex; gap:.4rem; flex-wrap:wrap }
+.project-card .tag {
+  font-family:'Caveat',cursive; font-size:.78rem;
+  padding:.1rem .5rem; border-radius:12px; border:1.5px solid;
+}
+.guide-link {
+  display:inline-flex; align-items:center; gap:.3rem;
+  font-family:'Caveat',cursive; font-size:.85rem;
+  color:var(--t-green); border:1.5px solid var(--b-green);
+  padding:.15rem .6rem; border-radius:8px 14px 10px 12px / 12px 10px 14px 8px;
+  text-decoration:none; width:fit-content;
+}
+.guide-link:hover { background:var(--f-green) }
+
+/* ── YOUTUBE CARD ────────────────────────────────────── */
+.yt-card {
+  border:3px solid #dc2626;
+  border-radius:8px 18px 10px 16px / 16px 10px 18px 8px;
+  padding:2rem; background:#fff; text-align:center;
+  filter:url(#rough);
+}
+.yt-card h3 { font-family:'Caveat',cursive; font-size:1.7rem; font-weight:700; color:#b91c1c; margin-bottom:.6rem }
+.yt-card p { font-size:.9rem; color:var(--ink2); max-width:520px; margin:0 auto 1.25rem; line-height:1.7 }
+.yt-btn {
+  display:inline-flex; align-items:center; gap:.5rem;
+  background:#dc2626; color:#fff;
+  font-family:'Caveat',cursive; font-size:1.1rem; font-weight:700;
+  padding:.65rem 1.6rem; border-radius:6px 12px 8px 10px / 10px 8px 12px 6px;
+  text-decoration:none; filter:url(#rough); transition:background .15s;
+}
+.yt-btn:hover { background:#b91c1c }
+
+/* ── CONNECT CARDS ───────────────────────────────────── */
+.connect-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; margin:1.25rem 0 }
+.connect-card {
+  border:2.5px solid; padding:1rem; text-align:center;
+  border-radius:6px 14px 8px 12px / 12px 8px 14px 6px;
+  font-family:'Caveat',cursive; text-decoration:none;
+  filter:url(#rough); display:block; transition:transform .15s;
+}
+.connect-card:hover { transform:translateY(-2px) }
+.connect-card .icon { font-size:1.8rem; display:block; margin-bottom:.3rem }
+.connect-card .label { font-size:1rem; font-weight:700; display:block }
+.connect-card .handle { font-size:.8rem; font-weight:400; opacity:.7; display:block }
+
+/* ── RESPONSIVE ──────────────────────────────────────── */
+@media(max-width:1000px){
+  .layout { grid-template-columns:1fr }
+  .sidebar { display:none }
+  .sticky-grid { grid-template-columns:1fr }
+  .projects-grid { grid-template-columns:1fr }
+  .connect-grid { grid-template-columns:1fr 1fr }
+}
+@media(max-width:900px){
+  .hero { padding:2rem 1.5rem }
+  .wb-section { padding:2rem 1.5rem 1.5rem }
+}
+@media(max-width:600px){
+  .hero h1 { font-size:2.2rem }
+  .stats { gap:1rem }
+  .connect-grid { grid-template-columns:1fr }
+}
+</style>
+</head>
+<body>
+<div class="layout">
+
+<!-- ═══════════ SIDEBAR ═══════════ -->
+<aside class="sidebar">
+  <div class="sidebar-brand">
+    <h3>🖊 Ayush Garg</h3>
+    <p>Senior SRE · Red Hat · UTC+05:30</p>
+  </div>
+  <nav>
+    <div class="s1"><a href="#s1"><span class="num">1</span> Who I Am</a></div>
+    <div class="s2"><a href="#s2"><span class="num">2</span> What I Work On</a></div>
+    <div class="s3"><a href="#s3"><span class="num">3</span> Projects &amp; Guides</a></div>
+    <div class="s4"><a href="#s4"><span class="num">4</span> Art of Exploitation</a></div>
+    <div class="s5"><a href="#s5"><span class="num">5</span> Let's Connect</a></div>
+  </nav>
+  <div class="sidebar-links">
+    <a href="https://github.com/ay-garg" target="_blank">⌥ github.com/ay-garg</a>
+    <a href="https://github.com/aygarg-rh" target="_blank">⌥ github.com/aygarg-rh</a>
+    <a href="https://linkedin.com/in/ay-garg" target="_blank">💼 linkedin.com/in/ay-garg</a>
+    <a href="https://www.youtube.com/@artofexploitation-ay" target="_blank">▶ Art of Exploitation</a>
+    <a href="https://blackhatinside.com" target="_blank">✍ blackhatinside.com</a>
+  </div>
+</aside>
+
+<!-- ═══════════ MAIN ═══════════ -->
+<main class="main">
+
+<!-- ─── HERO ──────────────────────────────────────────── -->
+<div class="hero">
+  <div class="hero-badge">🖊 Principal Engineer → Senior SRE · Red Hat · OpenShift</div>
+  <h1>Hi, I'm <span class="hl">Ayush</span> 👋</h1>
+  <p>
+    Senior Site Reliability Engineer at <strong>Red Hat</strong>, keeping OpenShift and Kubernetes clusters alive at scale. Previously a <strong>Principal Engineer on the OpenShift Networking team</strong> — years inside OVN-Kubernetes, Service Mesh, DNS, and Ingress routing.<br><br>
+    I write hands-on guides and make YouTube videos because a good explanation saves hours of debugging.
+  </p>
+  <div class="stats">
+    <div class="stat"><span class="val">SRE</span><span class="lbl">Current Role</span></div>
+    <div class="stat"><span class="val">30+</span><span class="lbl">Public Repos</span></div>
+    <div class="stat"><span class="val">4</span><span class="lbl">Live Guides</span></div>
+    <div class="stat"><span class="val">UTC+5:30</span><span class="lbl">Timezone</span></div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     S1 — WHO I AM
+════════════════════════════════════════════════════ -->
+<section class="wb-section" id="s1">
+  <div class="section-head">
+    <div class="section-tag-row">
+      <div class="section-num-bubble">1</div>
+      <span class="section-tag" style="border-color:var(--b-blue);color:var(--t-blue);background:var(--f-blue)">Background</span>
+    </div>
+    <h2>Who I Am</h2>
+    <p>An engineer who went deep into Kubernetes networking and came out the other side building reliability into the platforms that run it.</p>
+  </div>
+
+  <div class="sticky-grid">
+    <div class="sticky blue">
+      <h4>🏢 Now — Senior SRE @ Red Hat</h4>
+      Platform reliability, incident response, scalability, and making sure production OpenShift clusters don't fall over under real load. Working across cloud providers, bare-metal environments, and hybrid deployments.
+    </div>
+    <div class="sticky">
+      <h4>🔙 Previously — Principal Engineer, OpenShift Networking</h4>
+      Years inside OVN-Kubernetes, Service Mesh 3, DNS Operator, and Ingress internals. Built detailed technical guides, debugged packet paths in production, and contributed to how OpenShift networking works today.
+    </div>
+  </div>
+
+  <div class="sub-title">Career Arc</div>
+  <div class="flow-h" style="margin:1rem 0 1.5rem; justify-content:flex-start">
+    <div class="sbox blue">OpenShift Networking<small>Principal Engineer</small></div>
+    <div class="arr"></div>
+    <div class="sbox green">Platform Reliability<small>Senior SRE</small></div>
+    <div class="arr"></div>
+    <div class="sbox yellow">Content Creation<small>YouTube · Blog</small></div>
+  </div>
+
+  <div class="callout blue">
+    <h4>📍 Red Hat — Building What Runs the Cloud</h4>
+    <p>OpenShift runs critical workloads for thousands of enterprises. Working here means debugging real networking issues in production, understanding the full stack from kernel to API server, and building reliability tooling that entire teams depend on daily.</p>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════
+     S2 — WHAT I WORK ON
+════════════════════════════════════════════════════ -->
+<section class="wb-section" id="s2">
+  <div class="section-head">
+    <div class="section-tag-row">
+      <div class="section-num-bubble">2</div>
+      <span class="section-tag" style="border-color:var(--b-green);color:var(--t-green);background:var(--f-green)">Stack</span>
+    </div>
+    <h2>What I Work On</h2>
+    <p>From cloud provisioning down to the packet level — and back up through pipelines and GitOps.</p>
+  </div>
+
+  <!-- STACK DIAGRAM -->
+  <div class="diagram-canvas">
+  <svg viewBox="0 0 820 330" xmlns="http://www.w3.org/2000/svg" style="font-family:'Caveat',cursive;width:100%;max-width:820px">
+    <defs>
+      <pattern id="pg-s2" width="20" height="20" patternUnits="userSpaceOnUse">
+        <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#d1cfc8" stroke-width="0.4"/>
+      </pattern>
+    </defs>
+    <rect width="820" height="330" fill="url(#pg-s2)" opacity="0.5" rx="8"/>
+
+    <!-- Layer 1: Cloud / Infra -->
+    <rect x="10" y="10" width="800" height="72" rx="6" fill="#ccfbf1" stroke="#0d9488" stroke-width="2" stroke-dasharray="6 3"/>
+    <text x="20" y="30" font-size="12" fill="#134e4a" font-weight="700">☁ Cloud &amp; Infrastructure</text>
+    <rect x="30"  y="36" width="115" height="36" rx="6" fill="#fff" stroke="#0d9488" stroke-width="2"/>
+    <text x="87"  y="59" text-anchor="middle" font-size="14" fill="#134e4a" font-weight="600">AWS</text>
+    <rect x="160" y="36" width="115" height="36" rx="6" fill="#fff" stroke="#0d9488" stroke-width="2"/>
+    <text x="217" y="59" text-anchor="middle" font-size="14" fill="#134e4a" font-weight="600">Oracle Cloud</text>
+    <rect x="290" y="36" width="115" height="36" rx="6" fill="#fff" stroke="#0d9488" stroke-width="2"/>
+    <text x="347" y="59" text-anchor="middle" font-size="14" fill="#134e4a" font-weight="600">Terraform</text>
+    <rect x="420" y="36" width="115" height="36" rx="6" fill="#fff" stroke="#0d9488" stroke-width="2"/>
+    <text x="477" y="59" text-anchor="middle" font-size="14" fill="#134e4a" font-weight="600">Bare Metal UPI</text>
+
+    <!-- Arrow down -->
+    <line x1="410" y1="82" x2="410" y2="96" stroke="#374151" stroke-width="1.5" marker-end="url(#arr)"/>
+
+    <!-- Layer 2: Platform -->
+    <rect x="10" y="98" width="800" height="72" rx="6" fill="#dbeafe" stroke="#2563eb" stroke-width="2" stroke-dasharray="6 3"/>
+    <text x="20" y="118" font-size="12" fill="#1e3a8a" font-weight="700">🧱 Platform Layer</text>
+    <rect x="30"  y="124" width="135" height="36" rx="6" fill="#fff" stroke="#2563eb" stroke-width="2"/>
+    <text x="97"  y="147" text-anchor="middle" font-size="14" fill="#1e40af" font-weight="600">OpenShift 4</text>
+    <rect x="180" y="124" width="135" height="36" rx="6" fill="#fff" stroke="#2563eb" stroke-width="2"/>
+    <text x="247" y="147" text-anchor="middle" font-size="14" fill="#1e40af" font-weight="600">Kubernetes</text>
+    <rect x="330" y="124" width="135" height="36" rx="6" fill="#fff" stroke="#2563eb" stroke-width="2"/>
+    <text x="397" y="147" text-anchor="middle" font-size="14" fill="#1e40af" font-weight="600">SRE / Reliability</text>
+    <rect x="480" y="124" width="135" height="36" rx="6" fill="#fff" stroke="#2563eb" stroke-width="2"/>
+    <text x="547" y="147" text-anchor="middle" font-size="14" fill="#1e40af" font-weight="600">Observability</text>
+
+    <!-- Arrow down -->
+    <line x1="410" y1="170" x2="410" y2="184" stroke="#374151" stroke-width="1.5" marker-end="url(#arr)"/>
+
+    <!-- Layer 3: Networking -->
+    <rect x="10" y="186" width="800" height="72" rx="6" fill="#ede9fe" stroke="#7c3aed" stroke-width="2" stroke-dasharray="6 3"/>
+    <text x="20" y="206" font-size="12" fill="#4c1d95" font-weight="700">🔌 Networking Layer</text>
+    <rect x="30"  y="212" width="150" height="36" rx="6" fill="#fff" stroke="#7c3aed" stroke-width="2"/>
+    <text x="105" y="235" text-anchor="middle" font-size="14" fill="#5b21b6" font-weight="600">OVN-Kubernetes</text>
+    <rect x="196" y="212" width="150" height="36" rx="6" fill="#fff" stroke="#7c3aed" stroke-width="2"/>
+    <text x="271" y="235" text-anchor="middle" font-size="14" fill="#5b21b6" font-weight="600">Service Mesh 3</text>
+    <rect x="362" y="212" width="150" height="36" rx="6" fill="#fff" stroke="#7c3aed" stroke-width="2"/>
+    <text x="437" y="235" text-anchor="middle" font-size="14" fill="#5b21b6" font-weight="600">DNS / Ingress</text>
+    <rect x="528" y="212" width="150" height="36" rx="6" fill="#fff" stroke="#7c3aed" stroke-width="2"/>
+    <text x="603" y="235" text-anchor="middle" font-size="14" fill="#5b21b6" font-weight="600">TLS / Security</text>
+
+    <!-- Arrow down -->
+    <line x1="410" y1="258" x2="410" y2="272" stroke="#374151" stroke-width="1.5" marker-end="url(#arr)"/>
+
+    <!-- Layer 4: GitOps / CI-CD -->
+    <rect x="10" y="274" width="800" height="46" rx="6" fill="#ffedd5" stroke="#ea580c" stroke-width="2" stroke-dasharray="6 3"/>
+    <text x="20" y="294" font-size="12" fill="#7c2d12" font-weight="700">🔄 GitOps &amp; CI/CD</text>
+    <rect x="155" y="281" width="92" height="30" rx="5" fill="#fff" stroke="#ea580c" stroke-width="2"/>
+    <text x="201" y="301" text-anchor="middle" font-size="13" fill="#c2410c" font-weight="600">ArgoCD</text>
+    <rect x="261" y="281" width="92" height="30" rx="5" fill="#fff" stroke="#ea580c" stroke-width="2"/>
+    <text x="307" y="301" text-anchor="middle" font-size="13" fill="#c2410c" font-weight="600">Tekton</text>
+    <rect x="367" y="281" width="92" height="30" rx="5" fill="#fff" stroke="#ea580c" stroke-width="2"/>
+    <text x="413" y="301" text-anchor="middle" font-size="13" fill="#c2410c" font-weight="600">Konflux</text>
+    <rect x="473" y="281" width="92" height="30" rx="5" fill="#fff" stroke="#ea580c" stroke-width="2"/>
+    <text x="519" y="301" text-anchor="middle" font-size="13" fill="#c2410c" font-weight="600">PaC</text>
+  </svg>
+  </div>
+
+  <!-- Scripting & Tools -->
+  <div class="layer-group purple">
+    <div class="layer-label">Scripting &amp; Diagnostics</div>
+    <div class="inner">
+      <div class="sbox purple">Shell / Bash</div>
+      <div class="sbox purple">Python</div>
+      <div class="sbox purple">must-gather / oc adm inspect</div>
+      <div class="sbox purple">tcpdump / ovn-trace</div>
+      <div class="sbox purple">Jupyter Notebooks</div>
+      <div class="sbox purple">Docker / Podman</div>
+    </div>
+  </div>
+
+  <!-- Exploring -->
+  <div class="layer-group yellow">
+    <div class="layer-label">Currently Exploring</div>
+    <div class="inner">
+      <div class="sbox yellow">LLMs &amp; AI Tooling</div>
+      <div class="sbox yellow">Agentic Workflows</div>
+      <div class="sbox yellow">Claude API</div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════
+     S3 — PROJECTS & GUIDES
+════════════════════════════════════════════════════ -->
+<section class="wb-section" id="s3">
+  <div class="section-head">
+    <div class="section-tag-row">
+      <div class="section-num-bubble">3</div>
+      <span class="section-tag" style="border-color:var(--b-orange);color:var(--t-orange);background:var(--f-orange)">Projects</span>
+    </div>
+    <h2>Projects &amp; Published Guides</h2>
+    <p>Hands-on repos and live guides built from real production experience — not toy examples.</p>
+  </div>
+
+  <div class="sub-title">Published Guides — Live on GitHub Pages</div>
+
+  <!-- Steps for published guides -->
+  <div class="steps">
+    <div class="step blue">
+      <div class="step-line"><div class="step-dot">①</div><div class="step-connector"></div></div>
+      <div class="step-body">
+        <h4><a href="https://ay-garg.github.io/OpenShift-4-DNS/" target="_blank">OpenShift 4 DNS Architecture</a></h4>
+        <p>Deep dive into CoreDNS, the DNS Operator, node resolvers, and production troubleshooting. Explains what actually happens when a pod resolves a service name.
+        <br><a href="https://github.com/ay-garg/OpenShift-4-DNS" target="_blank">→ GitHub repo</a> &nbsp;·&nbsp; <a href="https://ay-garg.github.io/OpenShift-4-DNS/" target="_blank">→ Read the guide</a></p>
+      </div>
+    </div>
+    <div class="step purple">
+      <div class="step-line"><div class="step-dot">②</div><div class="step-connector"></div></div>
+      <div class="step-body">
+        <h4><a href="https://ay-garg.github.io/OpenShift_4_Architecture/" target="_blank">OpenShift 4 Architecture</a></h4>
+        <p>Control plane, worker nodes, networking, storage, security, and observability stack — with installation methods and architecture diagrams.
+        <br><a href="https://github.com/ay-garg/OpenShift_4_Architecture" target="_blank">→ GitHub repo</a> &nbsp;·&nbsp; <a href="https://ay-garg.github.io/OpenShift_4_Architecture/" target="_blank">→ Read the guide</a></p>
+      </div>
+    </div>
+    <div class="step teal">
+      <div class="step-line"><div class="step-dot">③</div><div class="step-connector"></div></div>
+      <div class="step-body">
+        <h4><a href="https://ay-garg.github.io/OpenShift_Service_Mesh_3/" target="_blank">OpenShift Service Mesh 3</a></h4>
+        <p>Architecture, installation, traffic management, security, observability, and troubleshooting for OSSM 3 built on Istio Sail Operator.
+        <br><a href="https://github.com/ay-garg/OpenShift_Service_Mesh_3" target="_blank">→ GitHub repo</a> &nbsp;·&nbsp; <a href="https://ay-garg.github.io/OpenShift_Service_Mesh_3/" target="_blank">→ Read the guide</a></p>
+      </div>
+    </div>
+    <div class="step orange">
+      <div class="step-line"><div class="step-dot">④</div></div>
+      <div class="step-body">
+        <h4><a href="https://github.com/ay-garg/tekton-field-guide" target="_blank">Tekton Field Guide</a></h4>
+        <p>Practical guide for Tekton pipelines on OpenShift — task authoring, real-world patterns, and the gotchas you only learn the hard way.
+        <br><a href="https://github.com/ay-garg/tekton-field-guide" target="_blank">→ GitHub repo</a></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="sub-title">More Repos</div>
+  <div class="projects-grid">
+
+    <div class="project-card">
+      <h4><a href="https://github.com/ay-garg/OpenShift4-AWS-BareMetal-UPI" target="_blank">OpenShift4-AWS-BareMetal-UPI</a></h4>
+      <p>End-to-end procedure to deploy OCP 4 BareMetal UPI on AWS — every command, every config file, from infra to cluster.</p>
+      <div class="tags">
+        <span class="tag" style="border-color:var(--b-orange);color:var(--t-orange)">OpenShift</span>
+        <span class="tag" style="border-color:var(--b-teal);color:var(--t-teal)">AWS</span>
+        <span class="tag" style="border-color:var(--b-blue);color:var(--t-blue)">UPI</span>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <h4><a href="https://github.com/ay-garg/must-gather-analysis" target="_blank">must-gather-analysis</a></h4>
+      <p>Shell scripts to verify OpenShift 4 cluster health from must-gather bundles. Spot issues fast without reading thousands of log lines manually.</p>
+      <div class="tags">
+        <span class="tag" style="border-color:var(--b-green);color:var(--t-green)">Shell</span>
+        <span class="tag" style="border-color:var(--b-blue);color:var(--t-blue)">Diagnostics</span>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <h4><a href="https://github.com/ay-garg/OpenShift-Service-Mesh-Secured-Gateway" target="_blank">Secured Gateway — Service Mesh</a></h4>
+      <p>Deploy a secured gateway for applications using OpenShift Service Mesh — mTLS, certificate management, and route encryption end to end.</p>
+      <div class="tags">
+        <span class="tag" style="border-color:var(--b-red);color:var(--t-red)">Security</span>
+        <span class="tag" style="border-color:var(--b-purple);color:var(--t-purple)">Service Mesh</span>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <h4><a href="https://github.com/ay-garg/collect-tcpdump-ocp" target="_blank">collect-tcpdump-ocp</a></h4>
+      <p>DaemonSet to capture tcpdump on every interface across all cluster nodes simultaneously — the right tool for production network debugging.</p>
+      <div class="tags">
+        <span class="tag" style="border-color:var(--b-teal);color:var(--t-teal)">Diagnostics</span>
+        <span class="tag" style="border-color:var(--b-blue);color:var(--t-blue)">Networking</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="callout green">
+    <h4>🔗 All repos on GitHub</h4>
+    <p>
+      Personal: <a href="https://github.com/ay-garg" target="_blank" style="color:var(--t-green)">github.com/ay-garg</a>
+      &nbsp;·&nbsp;
+      Work (Red Hat): <a href="https://github.com/aygarg-rh" target="_blank" style="color:var(--t-green)">github.com/aygarg-rh</a>
+    </p>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════
+     S4 — ART OF EXPLOITATION
+════════════════════════════════════════════════════ -->
+<section class="wb-section" id="s4">
+  <div class="section-head">
+    <div class="section-tag-row">
+      <div class="section-num-bubble">4</div>
+      <span class="section-tag" style="border-color:#dc2626;color:#7f1d1d;background:#fee2e2">YouTube</span>
+    </div>
+    <h2>Art of Exploitation</h2>
+    <p>A YouTube channel about understanding systems at the packet and syscall level — not just how to use tools, but why they behave the way they do.</p>
+  </div>
+
+  <div class="yt-card">
+    <h3>▶ Art of Exploitation</h3>
+    <p>OpenShift internals, networking deep dives, live packet captures, and hands-on labs. No fluff — real cluster behavior explained from first principles. The kind of content I wish had existed when I was debugging at 2am.</p>
+    <a href="https://www.youtube.com/@artofexploitation-ay" target="_blank" class="yt-btn">▶ Watch on YouTube</a>
+  </div>
+
+  <div class="sticky-grid" style="margin-top:1.25rem">
+    <div class="sticky red">
+      <h4>🎯 What You'll Find on the Channel</h4>
+      OVN-Kubernetes trace walkthroughs, OpenShift DNS deep dives, live packet captures, Service Mesh debugging, and the kind of root-cause analysis that doesn't fit in a Stack Overflow answer.
+    </div>
+    <div class="sticky teal">
+      <h4>✍ Blog — blackhatinside.com</h4>
+      Written guides on the same topics — when a concept needs more depth than a video can give. Think of it as the technical notes that go alongside the recordings.
+      <br><br>
+      <a href="https://blackhatinside.com" target="_blank" style="color:var(--t-teal)">→ blackhatinside.com</a>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════
+     S5 — CONNECT
+════════════════════════════════════════════════════ -->
+<section class="wb-section" id="s5">
+  <div class="section-head">
+    <div class="section-tag-row">
+      <div class="section-num-bubble">5</div>
+      <span class="section-tag" style="border-color:var(--b-pink);color:var(--t-pink);background:var(--f-pink)">Connect</span>
+    </div>
+    <h2>Let's Connect</h2>
+    <p>Find me wherever engineers hang out.</p>
+  </div>
+
+  <div class="connect-grid">
+    <a href="https://github.com/ay-garg" target="_blank" class="connect-card" style="border-color:var(--b-gray);color:var(--t-gray)">
+      <span class="icon">⌥</span>
+      <span class="label">GitHub</span>
+      <span class="handle">ay-garg</span>
+    </a>
+    <a href="https://linkedin.com/in/ay-garg" target="_blank" class="connect-card" style="border-color:var(--b-blue);color:var(--t-blue)">
+      <span class="icon">💼</span>
+      <span class="label">LinkedIn</span>
+      <span class="handle">in/ay-garg</span>
+    </a>
+    <a href="https://www.youtube.com/@artofexploitation-ay" target="_blank" class="connect-card" style="border-color:var(--b-red);color:var(--t-red)">
+      <span class="icon">▶</span>
+      <span class="label">YouTube</span>
+      <span class="handle">Art of Exploitation</span>
+    </a>
+    <a href="https://blackhatinside.com" target="_blank" class="connect-card" style="border-color:var(--b-orange);color:var(--t-orange)">
+      <span class="icon">✍</span>
+      <span class="label">Blog</span>
+      <span class="handle">blackhatinside.com</span>
+    </a>
+    <a href="https://github.com/aygarg-rh" target="_blank" class="connect-card" style="border-color:var(--b-gray);color:var(--t-gray)">
+      <span class="icon">⌥</span>
+      <span class="label">Work GitHub</span>
+      <span class="handle">aygarg-rh</span>
+    </a>
+  </div>
+
+  <div class="callout yellow" style="margin-top:1.5rem">
+    <h4>💡 If something in any repo saved you time</h4>
+    <p>Drop a ⭐ — it takes 2 seconds and helps others find it. That's the only metric that matters here.</p>
+  </div>
+</section>
+
+</main>
+</div>
+</body>
+</html>
