@@ -1,9 +1,9 @@
 <div align="center">
-    
+
 <br>
 
-<a href="https://ay-garg.github.io/ay-garg/">
-  <img src="https://img.shields.io/badge/🖊_This_README_is_just_the_index._Open_the_full_profile_%E2%86%92-fde047?style=for-the-badge&color=1a1a2e&labelColor=fde047" height="38"/>
+<a href="https://me.ayush-garg.com">
+<img src="https://img.shields.io/badge/🖊_This_README_is_just_the_index._Open_the_full_profile_%E2%86%92-fde047?style=for-the-badge&color=1a1a2e&labelColor=fde047" height="38"/>
 </a>
 
 <br><br>
@@ -14,7 +14,7 @@
 
 <br>
 
-[![Full Profile](https://img.shields.io/badge/ay--garg.github.io%2Fay--garg-Open%20Now%20%E2%86%97-1a1a2e?style=flat-square&labelColor=f3f4f6&color=1a1a2e)](https://ay-garg.github.io/ay-garg/)
+[![Full Profile](https://img.shields.io/badge/me.ayush--garg.com-Open%20Now%20%E2%86%97-1a1a2e?style=flat-square&labelColor=f3f4f6&color=1a1a2e)](https://me.ayush-garg.com)
 
 </div>
 
@@ -33,7 +33,7 @@ I keep OpenShift and Kubernetes clusters alive at scale. Before that, I spent ye
 
 | | |
 |---|---|
-| 🖊 **Full Profile** | [ay-garg.github.io/ay-garg](https://ay-garg.github.io/ay-garg/) |
+| 🖊 **Full Profile** | [me.ayush-garg.com](https://me.ayush-garg.com) |
 | ▶ **YouTube** | [Art of Exploitation](https://www.youtube.com/@artofexploitation-ay) |
 | ✍ **Blog** | [blackhatinside.com](https://blackhatinside.com) |
 | 💼 **LinkedIn** | [in/ay-garg](https://linkedin.com/in/ay-garg) |
